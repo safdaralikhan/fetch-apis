@@ -1,0 +1,238 @@
+ 
+GET API
+
+ const GetServices = () => {
+
+     
+            // setLoader(true);
+            var requestOptions = {
+                method: 'GET',
+                headers: {
+                    Authorization: "Bearer " + Token
+                }
+            };
+            fetch(`${baseUrl.baseUrl}webapi/category?role=superadmin`, requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    setLoader(false);
+                    if (result.status && result.status != "False") {
+                        console.log("get admin services ", result.data);
+                        setGetService(result.data);
+                    }
+                    else {
+                        if (result.message == "Unauthorized") {
+                            navigate("/")
+                        } else {
+                            setModal(true)
+                            setError2(true)
+                            setMessage3(result.message)
+                        }
+                    }
+                })
+                .catch(error => {
+                    setLoader(false);
+                    setError2(true)
+                    setMessage3(error)
+                });
+
+        
+
+    }
+
+
+ADD API 
+
+ const AddServices = () => {
+      
+            if (Servicename == "") {
+
+                setLoader(false)
+                setError2(true)
+                setMessage3("All keys are required ")
+
+            }
+            else {
+                setLoader(true)
+
+                toggle()
+                const form = new FormData()
+                form.append("name", Servicename)
+
+
+                var requestOptions = {
+                    method: 'POST',
+
+                    headers: {
+                        Authorization: "Bearer " + Token
+                    },
+                    body: form,
+                };
+                // setLoader(true);
+                fetch(`${baseUrl.baseUrl}webapi/category?role=superadmin `, requestOptions)
+                    .then(response => response.json())
+                    .then(result => {
+
+                        setLoader(false);
+                        if (result.status) {
+                            console.log(result)
+                            GetServices()
+                            toggle()
+                            setError(true)
+                            setMessage(result.message)
+
+                        }
+                        else {
+                            if (result.message == "Unauthorized") {
+                                navigate("/")
+                            } else {
+                                setModal(true)
+                                setError2(true)
+                                setMessage3(result.message)
+
+                             
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        setModal(true)
+                        setLoader(false);
+                        setError2(true)
+                        setMessage3(error)
+
+                    });
+
+            }
+
+        
+      
+
+    }
+
+
+
+ // Edit api
+
+    const EditServices = () => {
+
+       
+            setLoader(true)
+
+
+            if (Servicename == "") {
+
+
+                setLoader(false)
+                setError2(true)
+                setMessage3("All keys are required ")
+            }
+            else {
+                setLoader(true)
+
+                const form = new FormData()
+                form.append("id", id);
+                form.append("name", Servicename);
+                var requestOptions = {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: "Bearer " + Token
+                    },
+                    body: form,
+                };
+                // setLoader(true);
+                fetch(`${baseUrl.baseUrl}webapi/category?role=superadmin`, requestOptions)
+                    .then(response => response.json())
+                    .then(result => {
+                        setLoader(false);
+                        console.log(result);
+                        if (result.status) {
+                            GetServices()
+                            toggle1()
+                            setError(true)
+                            setMessage(result.message)
+
+
+                        }
+                        else {
+                            if (result.message == "Unauthorized") {
+                                navigate("/")
+                            } else {
+                                toggle1()
+                                setError2(true)
+                                setMessage3(result.message)
+
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        toggle1()
+                        setLoader(false);
+
+                        setError2(true)
+                        setMessage3(error)
+
+                    });
+
+            }
+        
+       
+
+    }
+
+
+DELETE API
+
+
+ const ConfirmDelete = (a) => {
+
+        setLoader(true)
+      
+
+        
+                const form = new FormData()
+                form.append("id", id)
+                form.append("role", 'superadmin')
+                var requestOptions = {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: "Bearer " + Token
+                    },
+                    body: form,
+                };
+                // setLoader(true);
+                fetch(`${baseUrl.baseUrl}webapi/category?role=superadmin&id=${id}`, requestOptions)
+                    .then(response => response.json())
+                    .then(result => {
+                        setLoader(false);
+                        console.log(result);
+                        if (result.status) {
+                            setError(true)
+                            setMessage(result.message)
+                            setError1(false)
+
+                            GetServices()
+                        }
+                        else {
+                            if (result.message == "Unauthorized") {
+                                navigate("/")
+                            } else {
+                                setError2(true)
+                                setMessage3(result.message)
+
+
+
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        setLoader(false);
+                        setError2(true)
+                        setMessage3(error)
+                    });
+
+
+            
+          
+
+        
+
+    }
